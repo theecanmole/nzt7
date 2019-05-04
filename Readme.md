@@ -4,60 +4,66 @@
 
 This repository features the code to download the New Zealand [NIWA Seven-station series](https://www.niwa.co.nz/our-science/climate/information-and-resources/nz-temp-record/seven-station-series-temperature-data) land surface temperature data and to create a chart.
 
-### R script
+R script
 
 ```library(here)```
 here() starts at /home/user/R/nzt7
 ```set_here()```
 ```library(readxl)```
 
-# obtain data sheet from NIWA
+obtain data sheet from NIWA
 ```url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 file <- c("/home/user/R/nzt7/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-download.file(url, file)```
+```download.file(url, file)```
 trying URL 'https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx'
 Content type 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' length 22763 bytes (22 KB)
 ==================================================
 downloaded 22 KB
+```
+List all sheets in an excel spreadsheet
 
-# List all sheets in an excel spreadsheet
 ``` 
 excel_sheets("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-```
 [1] "NZT7_Adjusted_TMean2016_Web"
-
+```
+Read in temperature anomaly data
 ```t7data <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="Q12:Q122", col_names = T, skip =11,col_types = c("guess"))
 ```
+Check object
 ```str(t7data)
-``` 
 Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+```
+Read in date data
 ```
 year <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="A12:A122", col_names = T, skip =11,col_types = c("guess"))
 ```
-```str(year)``` 
+Check the object
+```str(year) 
 Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
  $ X__1: num  1909 1910 1911 1912 1913 . 
- 
+```
+
+Combine date and temperature data into a dataframe 
 ```t7data<-cbind(year,t7data) ```
 
-```str(t7data)``` 
+```str(t7data)
 'data.frame':	110 obs. of  2 variables:
  $ X__1   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
-
+```
+Assign names of vectors within the dataframe
 ```
 names(t7data)<-c("Year","Anomaly")
-```
-```str(t7data)
-```
+str(t7data)
  'data.frame':	110 obs. of  2 variables:
  $ Year   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+ ```
 
+Inspect last 5 rows of dataframe
 ```
 tail(t7data)
-```
    Year Anomaly
 105 2013    0.72
 106 2014    0.18
@@ -65,12 +71,12 @@ tail(t7data)
 108 2016    0.84
 109 2017    0.54
 110 2018    0.80
-
-# write data to a .csv file
-```write.table(t7data, file = "/home/user/R/nzt7/niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
+```
+write the datafame to a .csv file
+```write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 ```
 
-# create graph
+create graph
 ```
 svg(filename="NZ-T7-land-temp-anom-720by540-v1.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 par(mar=c(2.7,2.7,1,1)+0.1)
@@ -95,11 +101,11 @@ This data and the R scripts are made available under the Public Domain Dedicatio
 
 #### Index of files
 
-1. [](NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019) (Data from NIWA)
+1. [NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx](NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx) (Data from NIWA)
 
-2. [](niwa-t7data.csv) (processed temperature data)
+2. [niwa-t7data.csv](niwa-t7data.csv) (processed temperature data)
 
-3. [](nzt7.r)     (R script file of code to process data and to create chart)
+3. [nzt7.r](nzt7.r)     (R script file of code to process data and to create chart)
 
 4. [Licence.txt](Licence.txt) (Public Domain  Dedication and License v1.0 http://opendatacommons.org/licenses/pddl/1.0/)
 
