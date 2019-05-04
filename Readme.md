@@ -6,10 +6,10 @@ This repository features the code to download the New Zealand [NIWA Seven-statio
 
 R script
 
-```library(here)```
-here() starts at /home/user/R/nzt7
-```set_here()```
-```library(readxl)```
+```library(here)
+set_here()
+library(readxl)
+```
 
 obtain data sheet from NIWA
 ```url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
@@ -20,14 +20,16 @@ Content type 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 ==================================================
 downloaded 22 KB
 ```
-List all sheets in an excel spreadsheet
 
+List all sheets in an excel spreadsheet
 ``` 
 excel_sheets("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 [1] "NZT7_Adjusted_TMean2016_Web"
 ```
 Read in temperature anomaly data
-```t7data <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="Q12:Q122", col_names = T, skip =11,col_types = c("guess"))
+
+```
+t7data <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="Q12:Q122", col_names = T, skip =11,col_types = c("guess"))
 ```
 Check object
 ```str(t7data)
@@ -39,13 +41,16 @@ Read in date data
 year <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="A12:A122", col_names = T, skip =11,col_types = c("guess"))
 ```
 Check the object
-```str(year) 
+```
+str(year) 
 Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
  $ X__1: num  1909 1910 1911 1912 1913 . 
 ```
 
 Combine date and temperature data into a dataframe 
-```t7data<-cbind(year,t7data) ```
+```
+t7data<-cbind(year,t7data)
+```
 
 ```str(t7data)
 'data.frame':	110 obs. of  2 variables:
@@ -73,7 +78,8 @@ tail(t7data)
 110 2018    0.80
 ```
 write the datafame to a .csv file
-```write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
+```
+write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 ```
 
 create graph
