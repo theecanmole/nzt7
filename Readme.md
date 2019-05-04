@@ -16,14 +16,15 @@ obtain data sheet (.xlsx format) from NIWA
 url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 file <- c("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 ```
-```download.file(url, file)
+```
+download.file(url, file)
 trying URL 'https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx'
 Content type 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' length 22763 bytes (22 KB)
 ==================================================
 downloaded 22 KB
 ```
 
-List all sheets in an excel spreadsheet
+List the sheets in the excel spreadsheet
 ``` 
 excel_sheets("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 [1] "NZT7_Adjusted_TMean2016_Web"
