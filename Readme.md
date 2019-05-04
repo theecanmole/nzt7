@@ -11,10 +11,12 @@ set_here()
 library(readxl)
 ```
 
-obtain data sheet from NIWA
-```url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-file <- c("/home/user/R/nzt7/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-```download.file(url, file)```
+obtain data sheet (.xlsx format) from NIWA
+```
+url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
+file <- c("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
+```
+```download.file(url, file)
 trying URL 'https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx'
 Content type 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' length 22763 bytes (22 KB)
 ==================================================
