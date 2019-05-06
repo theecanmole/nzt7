@@ -6,17 +6,15 @@ This repository features the code to download the New Zealand [NIWA Seven-statio
 
 R script
 
-```library(here)
+```{r}{r}library(here)
 set_here()
 library(readxl)
 ```
 
 obtain data sheet (.xlsx format) from NIWA
-```
+```{r}
 url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 file <- c("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-```
-```
 download.file(url, file)
 trying URL 'https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx'
 Content type 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' length 22763 bytes (22 KB)
@@ -25,43 +23,44 @@ downloaded 22 KB
 ```
 
 List the sheets in the excel spreadsheet
-``` 
+```{r} 
 excel_sheets("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 [1] "NZT7_Adjusted_TMean2016_Web"
 ```
 Read in temperature anomaly data
 
-```
+```{r}
 t7data <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="Q12:Q122", col_names = T, skip =11,col_types = c("guess"))
 ```
 Check object
-```str(t7data)
+```{r}str(t7data)
 Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 ```
 Read in date data
-```
+```{r}
 year <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="A12:A122", col_names = T, skip =11,col_types = c("guess"))
 ```
 Check the object
-```
+```{r}
 str(year) 
 Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
  $ X__1: num  1909 1910 1911 1912 1913 . 
 ```
 
 Combine date and temperature data into a dataframe 
-```
+```{r}
 t7data<-cbind(year,t7data)
 ```
 
-```str(t7data)
+```{r}
+str(t7data)
 'data.frame':	110 obs. of  2 variables:
  $ X__1   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 ```
 Assign names of vectors within the dataframe
-```
+```{r}
 names(t7data)<-c("Year","Anomaly")
 str(t7data)
  'data.frame':	110 obs. of  2 variables:
@@ -70,7 +69,7 @@ str(t7data)
  ```
 
 Inspect last 5 rows of dataframe
-```
+```{r}
 tail(t7data)
    Year Anomaly
 105 2013    0.72
@@ -80,13 +79,14 @@ tail(t7data)
 109 2017    0.54
 110 2018    0.80
 ```
+
 write the datafame to a .csv file
-```
+```{r}
 write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 ```
 
 create graph
-```
+```{r}
 svg(filename="NZ-T7-land-temp-anom-720by540-v1.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 par(mar=c(2.7,2.7,1,1)+0.1)
 plot(t7data[["Year"]],t7data[["Anomaly"]],ylim=c(-1.5,1.25),xlim=c(1905,2018),tck=0.01,axes=FALSE,ann=FALSE, type="l",col="1",lwd=1,las=1)
@@ -101,6 +101,9 @@ mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 legend(1910, 1,bty='n',bg="white", c(paste("Mean", c("annual anomaly", "lowess smoothed \nanomaly 11 years f =0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
 dev.off()
 ```
+
+![New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2018](NZ-T7-land-temp-anom-720by540-v1.svg)
+
 ### License
 
 #### ODC-PDDL-1.0
