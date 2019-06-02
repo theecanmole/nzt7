@@ -12,7 +12,6 @@ here() starts at /home/user/R/nzt7
 set_here()
 library(readxl)
 
-# t7data <- read.csv("", skip = 5,header=TRUE, stringsAsFactors=FALSE)
 # obtain data sheet from NIWA
 url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 file <- c("/home/user/R/nzt7/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
@@ -29,6 +28,8 @@ excel_sheets("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 [1] "NZT7_Adjusted_TMean2016_Web"
 
 t7data <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="Q12:Q122", col_names = T, skip =11,col_types = c("guess"))
+# Alternatively read in the tidied data in csv format
+t7data <- read.csv("niwa-t7data.csv", skip = 5,header=TRUE, stringsAsFactors=FALSE)
 
 str(t7data) 
 Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
@@ -53,12 +54,13 @@ str(t7data)
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 
 tail(t7data)
-   Year Anomaly
-105 2013    0.72
-106 2014    0.18
-107 2015    0.14
-108 2016    0.84
-109 2017    0.54110 2018    0.80
+ Year Anomaly
+100 2013    0.72
+101 2014    0.18
+102 2015    0.14
+103 2016    0.84
+104 2017    0.54
+105 2018    0.80
 
 write.table(t7data, file = "/home/user/R/nzt7/niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 
@@ -95,6 +97,7 @@ mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data
 mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2018")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 legend(1910, 1,bty='n',bg="white", c(paste("Mean", c("annual anomaly", "lowess smoothed \nanomaly 11 years f =0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
+mtext(side=4,cex=0.75, line=0.05,R.version.string)
 dev.off()
 
 

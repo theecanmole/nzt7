@@ -99,6 +99,7 @@ mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data
 mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2018")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 legend(1910, 1,bty='n',bg="white", c(paste("Mean", c("annual anomaly", "lowess smoothed \nanomaly 11 years f =0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
+mtext(side=4,cex=0.75, line=0.05,R.version.string)
 dev.off()
 ```
 
