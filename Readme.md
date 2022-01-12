@@ -6,7 +6,8 @@ This repository features the code to download the New Zealand [NIWA Seven-statio
 
 R script
 
-```{r}{r}library(here)
+```{r}
+library(here)
 set_here()
 library(readxl)
 ```
