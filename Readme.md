@@ -80,31 +80,43 @@ tail(t7data)
 109 2017    0.54
 110 2018    0.80
 ```
+add 2019 annual anomaly 0.76 C ref https://www.nzherald.co.nz/environment/news/article.cfm?c_id=39&objectid=12299091
+```{r}
+t7data <- rbind(t7data,c(2019,0.76))
+```
+add 2020 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2020 2020
+```{r}
+t7data <- rbind(t7data,c(2020,0.63))
+```
+add 2021 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2021
+```{r}
+t7data <- rbind(t7data,c(2021,0.95))
+```
 
+```{r}
 write the datafame to a .csv file
 ```{r}
 write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 ```
 
-create graph
+create svg format chart with 14 pt text font and grid lines via 'grid' and linear trend line
+
 ```{r}
-svg(filename="NZ-T7-land-temp-anom-720by540-v1.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+svg(filename="/home/user/R/nzt7/nzt7timeseries2021-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
 par(mar=c(2.7,2.7,1,1)+0.1)
-plot(t7data[["Year"]],t7data[["Anomaly"]],ylim=c(-1.5,1.25),xlim=c(1905,2018),tck=0.01,axes=FALSE,ann=FALSE, type="l",col="1",lwd=1,las=1)
-axis(side=1, tck=0.01, las=0,tick=TRUE)
-axis(side=2, tck=0.01, las=0,tick=TRUE,las=1)
-box()
-points(t7data[["Year"]],t7data[["Anomaly"]],col="#000099",pch=19)
-lines(lowess(t7data[["Year"]],t7data[["Anomaly"]],f=0.1),lwd=3,col="#CC0000")
-mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2018")) )
-mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
-legend(1910, 1,bty='n',bg="white", c(paste("Mean", c("annual anomaly", "lowess smoothed \nanomaly 11 years f =0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
+plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,type='l',lty=1)
+grid(col="darkgray",lwd=1)
+axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
+mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
+mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2021")) )
+mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
+abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=1)
+legend(1920, 0.8, bty='n',bg="white", cex = 0.8, c(paste("Annual anomaly", c("mean", "linear trend line"))),pch=c(NA,NA),lty=c(1,1),lwd=c(2,2),col=c("#CC0000","#000099"))
 dev.off()
 ```
 
-![New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2018](NZ-T7-land-temp-anom-720by540-v1.svg)
+![New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2021](nzt7timeseries2021-720by540.svg)
 
 ### License
 

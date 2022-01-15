@@ -187,7 +187,7 @@ t7data <- rbind(t7data,c(2021,0.95))
 112 2020    0.63
 113 2021    0.95
 
-# create svg format chart with 14 pt text font and grid lines via 'grid' and trend line
+# create svg format chart with 14 pt text font and grid lines via 'grid' and linear trend line
 svg(filename="/home/user/R/nzt7/nzt7timeseries2021-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
 par(mar=c(2.7,2.7,1,1)+0.1)
 plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,type='l',lty=1)
