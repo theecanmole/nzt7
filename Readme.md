@@ -53,22 +53,17 @@ Combine date and temperature data into a dataframe
 ```{r}
 t7data<-cbind(year,t7data)
 ```
-
-```{r}
-str(t7data)
-'data.frame':	110 obs. of  2 variables:
- $ X__1   : num  1909 1910 1911 1912 1913 ...
- $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
-```
 Assign names of vectors within the dataframe
 ```{r}
 names(t7data)<-c("Year","Anomaly")
+```
+Check dataframe
+```{r}
 str(t7data)
  'data.frame':	110 obs. of  2 variables:
  $ Year   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
- ```
-
+```
 Inspect last 5 rows of dataframe
 ```{r}
 tail(t7data)
@@ -92,8 +87,10 @@ add 2021 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-202
 ```{r}
 t7data <- rbind(t7data,c(2021,0.95))
 ```
-
+add 2022 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2022
 ```{r}
+t7data <- rbind(t7data,c(2022,1.15))
+```
 write the datafame to a .csv file
 ```{r}
 write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
@@ -108,7 +105,7 @@ plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,typ
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2021")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2022")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=1)
@@ -116,7 +113,7 @@ legend(1920, 0.8, bty='n',bg="white", cex = 0.8, c(paste("Annual anomaly", c("me
 dev.off()
 ```
 
-![New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2021](nzt7timeseries2021-720by540.svg)
+![New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2022](nzt7timeseries2022-720by540.svg)
 
 ### License
 
@@ -129,7 +126,7 @@ This data and the R scripts are made available under the Public Domain Dedicatio
 
 1. [NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx](NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx) (Data from NIWA)
 
-2. [niwa-t7data.csv](niwa-t7data.csv) (processed temperature data)
+2. [niwa-t7data.csv](niwa-t7data.csv) (processed and updated temperature data)
 
 3. [nzt7.r](nzt7.r)     (R script file of code to process data and to create chart)
 

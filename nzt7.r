@@ -1,5 +1,4 @@
-
-# Temperature series by Statistics NZ based on NIWA Seven Station Series but with reference to a baseline of the 1961-1990 average, 15 October 2020, 10:45am
+# Temperature series by Statistics NZ based on NIWA Seven Station Series but with reference to a baseline of the 1961-1990 average
 date()
 [1] "Wed Jan 12 13:52:52 2022"
 # reference of page
@@ -30,11 +29,13 @@ str(StatsNZ7Sdata19611990)
 filter(StatsNZ7Sdata19611990, source == "NIWA 7 Station" )
 Error in source == "NIWA 7 Station" : 
   comparison (1) is possible only for atomic and list types
+
 # select using Base R
 StatsNZ7Sdata19611990[StatsNZ7Sdata19611990[["source"]] == "NIWA 7 Station",]
 # 111 rows looks ok
 # select only 7 station to its own dataframe
 StatsNZ7Sdata <- StatsNZ7Sdata19611990[StatsNZ7Sdata19611990[["source"]] == "NIWA 7 Station",]
+# check new dataframe
 str(StatsNZ7Sdata)
 'data.frame':	111 obs. of  6 variables:
  $ year            : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
@@ -161,40 +162,37 @@ t7data <- read.csv("/home/user/R/nzt7/niwa-t7data.csv")
 9 Jan, 2020 11:00am, Jamie Morton 
 
 t7data <- rbind(t7data,c(2019,0.76))
-str(t7data)
-'data.frame':	111 obs. of  2 variables:
- $ Year   : num  1909 1910 1911 1912 1913 ...
- $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
-tail(t7data)
-    Year Anomaly
-106 2014    0.18
-107 2015    0.14
-108 2016    0.84
-109 2017    0.54
-110 2018    0.80
-111 2019    0.76
 
 # add 2020 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2020 2020 was Aotearoa New Zealand’s 7th-warmest year on record. The nationwide average temperature for 2020, calculated using stations in NIWA’s seven-station temperature series which began in 1909, was 13.24°C (0.63°C above the 1981–2010 annual average).
 t7data <- rbind(t7data,c(2020,0.63))
+
 # add 2021 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2021   Annual Climate Summary 2021 11 January 2022 2021 was Aotearoa New Zealand’s warmest year on record, surpassing the previous record set in 2016. Seven of the past nine years have been among New Zealand’s warmest on record. This trend is consistent with the overall pattern of global warming. The nationwide average temperature for 2021, calculated using stations in NIWA’s seven-station temperature series which began in 1909, was 13.56°C (0.95°C above the 1981–2010 annual average).
+
 t7data <- rbind(t7data,c(2021,0.95))
- tail(t7data)
+
+# add 2022 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2022 11 January 2023 2022: New Zealand’s warmest year on record, again. Overview 2022 was Aotearoa New Zealand’s warmest year on record, surpassing the record set just last year (Figure 1,Figure 2a). The nationwide average temperature for 2022 calculated using stations in NIWA’s seven-station series was 13.76˚C, being +1.15˚C above the 1981-2010 annual average, surpassing 2021 by +0.20˚C
+
+t7data <- rbind(t7data,c(2022,1.15))
+str(t7data)
+'data.frame':	114 obs. of  2 variables:
+ $ Year   : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
+ $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ... 
+tail(t7data,2)
     Year Anomaly
-108 2016    0.84
-109 2017    0.54
-110 2018    0.80
-111 2019    0.76
-112 2020    0.63
 113 2021    0.95
+114 2022    1.15 
+# calculate absolute change - last (114th) anomaly less first (1st) anomaly
+t7data[["Anomaly"]][114] - t7data[["Anomaly"]][1]
+[1] 1.37 
 
 # create svg format chart with 14 pt text font and grid lines via 'grid' and linear trend line
-svg(filename="/home/user/R/nzt7/nzt7timeseries2021-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
+svg(filename="/home/user/R/nzt7/nzt7timeseries2022-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
 par(mar=c(2.7,2.7,1,1)+0.1)
 plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,type='l',lty=1)
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2021")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2022")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=1)
@@ -254,8 +252,92 @@ dev.off()
 write.table(t7data, file = "/home/user/R/nzt7/niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 
 knit("nzt7.r", output = "nzt7.html", tangle = FALSE, quiet = FALSE, envir = parent.frame(), encoding = "UTF-8")
-"[1] "nzt7.html"
+[1] "nzt7.html"
 # just a plain text file with a .html suffix 
 knit("nzt7.r")
 [1] "nzt7.txt"
 # just a plain text file  
+--------------------------------------
+# convert t7data into time series object
+# find start
+head(t7data,1)
+  Year Anomaly
+1 1909   -0.22 
+# find end
+tail(t7data,1)
+    Year Anomaly
+113 2021    0.95
+
+# create a time series object ts(data = NA, start = 1, end = numeric(), frequency = 1, deltat = 1, ts.eps = getOption("ts.eps"), class = , names = )
+
+t7timeseries <- ts(t7data[["Anomaly"]], start = 1909, end = 2021, frequency =1 )
+is.ts(t7timeseries)
+[1] TRUE 
+str(t7timeseries)
+Time-Series [1:113] from 1909 to 2021: -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ... 
+print(t7timeseries)
+Time Series:
+Start = 1909 
+End = 2021 
+Frequency = 1 
+  [1] -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67  0.38  0.19 -0.80 -1.22 -1.07
+ [13] -0.75 -0.60 -0.76  0.20 -1.02 -0.83 -0.99  0.09 -0.66 -1.36 -1.16 -1.01
+ [25] -0.55 -0.34 -0.14 -0.72 -0.94  0.24 -0.68 -0.86 -0.88 -0.58 -0.85 -0.83
+ [37] -1.07 -0.81 -0.55 -0.32 -0.60 -0.48 -0.81 -0.48 -0.55 -0.01  0.18  0.31
+ [49] -0.15 -0.22 -0.46 -0.34 -0.33  0.30 -0.65 -0.59 -0.73 -0.46 -0.34 -0.40
+ [61] -0.43  0.26  0.50 -0.37  0.08  0.13  0.00 -0.88 -0.84  0.21 -0.06 -0.35
+ [73]  0.25 -0.49 -0.58  0.07  0.24  0.05  0.16  0.32  0.36  0.38 -0.44 -1.13
+ [85] -0.77 -0.28 -0.02 -0.16 -0.33  0.80  0.74  0.18  0.29  0.06  0.01 -0.44
+ [97]  0.50 -0.21  0.06  0.25 -0.32  0.46  0.22 -0.15  0.72  0.18  0.14  0.84
+[109]  0.54  0.80  0.76  0.63  0.95
+dput(t7timeseries)
+structure(c(-0.22, -0.15, -0.66, -1.28, -1.04, -1.03, -0.67, 
+0.38, 0.19, -0.8, -1.22, -1.07, -0.75, -0.6, -0.76, 0.2, -1.02, 
+-0.83, -0.99, 0.09, -0.66, -1.36, -1.16, -1.01, -0.55, -0.34, 
+-0.14, -0.72, -0.94, 0.24, -0.68, -0.86, -0.88, -0.58, -0.85, 
+-0.83, -1.07, -0.81, -0.55, -0.32, -0.6, -0.48, -0.81, -0.48, 
+-0.55, -0.01, 0.18, 0.31, -0.15, -0.22, -0.46, -0.34, -0.33, 
+0.3, -0.65, -0.59, -0.73, -0.46, -0.34, -0.4, -0.43, 0.26, 0.5, 
+-0.37, 0.08, 0.13, 0, -0.88, -0.84, 0.21, -0.06, -0.35, 0.25, 
+-0.49, -0.58, 0.07, 0.24, 0.05, 0.16, 0.32, 0.36, 0.38, -0.44, 
+-1.13, -0.77, -0.28, -0.02, -0.16, -0.33, 0.8, 0.74, 0.18, 0.29, 
+0.06, 0.01, -0.44, 0.5, -0.21, 0.06, 0.25, -0.32, 0.46, 0.22, 
+-0.15, 0.72, 0.18, 0.14, 0.84, 0.54, 0.8, 0.76, 0.63, 0.95), tsp = c(1909, 
+2021, 1), class = "ts") 
+
+svg(filename="NZ-T7-land-temp-anom-2021-720by540-TS.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+par(mar=c(2.7,2.7,1,1)+0.1)
+plot(t7timeseries,ylim=c(-1.5,1.45),xlim=c(1905,2021),tck=0.01,axes=FALSE,ann=FALSE, type="l",col="1",lwd=1,las=1)
+axis(side=1, tck=0.01, las=0,tick=TRUE)
+axis(side=2, tck=0.01, las=0,tick=TRUE,las=1)
+box()
+lines(t7timeseries,col="1",lwd=1)
+points(t7timeseries,col="#000099",pch=19)
+lines(lowess(t7timeseries,f=0.1),lwd=3,col="#CC0000")
+mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2021")) )
+mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
+legend(1910, 1,bty='n',bg="white", cex = 0.8, c(paste("Mean", c("annual anomaly", "lowess smoothed anomaly 11 years f = 0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
+mtext(side=4,cex=0.75, line=0.05,R.version.string)
+abline(h=0,col="darkgray")
+dev.off()
+
+t7timeseriesv2 <- structure(c(-0.22, -0.15, -0.66, -1.28, -1.04, -1.03, -0.67, 
+0.38, 0.19, -0.8, -1.22, -1.07, -0.75, -0.6, -0.76, 0.2, -1.02, 
+-0.83, -0.99, 0.09, -0.66, -1.36, -1.16, -1.01, -0.55, -0.34, 
+-0.14, -0.72, -0.94, 0.24, -0.68, -0.86, -0.88, -0.58, -0.85, 
+-0.83, -1.07, -0.81, -0.55, -0.32, -0.6, -0.48, -0.81, -0.48, 
+-0.55, -0.01, 0.18, 0.31, -0.15, -0.22, -0.46, -0.34, -0.33, 
+0.3, -0.65, -0.59, -0.73, -0.46, -0.34, -0.4, -0.43, 0.26, 0.5, 
+-0.37, 0.08, 0.13, 0, -0.88, -0.84, 0.21, -0.06, -0.35, 0.25, 
+-0.49, -0.58, 0.07, 0.24, 0.05, 0.16, 0.32, 0.36, 0.38, -0.44, 
+-1.13, -0.77, -0.28, -0.02, -0.16, -0.33, 0.8, 0.74, 0.18, 0.29, 
+0.06, 0.01, -0.44, 0.5, -0.21, 0.06, 0.25, -0.32, 0.46, 0.22, 
+-0.15, 0.72, 0.18, 0.14, 0.84, 0.54, 0.8, 0.76, 0.63, 0.95), tsp = c(1909, 
+2021, 1), class = "ts") 
+str(t7timeseriesv2)
+Time-Series [1:113] from 1909 to 2021: -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ... 
+
+# Apply identical function
+identical(t7timeseries, t7timeseriesv2)
+[1] TRUE
