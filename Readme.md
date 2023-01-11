@@ -115,6 +115,10 @@ dev.off()
 
 ![New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2022](nzt7timeseries2022-720by540.svg)
 
+Chart with a Lowess regression curve
+
+![New Zealand Mean Land Surface Temperature Anomalies 1909 - 2022](NZ-T7-land-temp-anom-2022-720by540.svg)
+
 ### License
 
 #### ODC-PDDL-1.0
