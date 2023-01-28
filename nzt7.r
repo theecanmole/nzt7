@@ -1,82 +1,6 @@
-# Temperature series by Statistics NZ based on NIWA Seven Station Series but with reference to a baseline of the 1961-1990 average
-date()
-[1] "Wed Jan 12 13:52:52 2022"
-# reference of page
-https://www.stats.govt.nz/indicators/temperature
-# url of "download.zip"
-https://statisticsnz.shinyapps.io/temperature_oct20/_w_0962552b/session/5433aba7a6a424c531e166b85475ea70/download/download?w=0962552b
-# unzip to "/home/user/R/nzt7/download"
-# check directory
-getwd()
-[1] "/home/user/R/nzt7"
-# load libararies
-library(readxl)
-library(knitr)
-library(tidyr) 
-# read in the data in csv format 
-StatsNZ7Sdata19611990 <- read.csv("/home/user/R/nzt7/download/state_data_7s.csv")
-# look at dataframe
-str(StatsNZ7Sdata19611990) 
-'data.frame':	444 obs. of  6 variables:
- $ year            : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
- $ temperature     : num  12.4 12.5 11.9 11.3 11.6 ...
- $ data_released   : int  2020 2020 2020 2020 2020 2020 2020 2020 2020 2020 ...
- $ source          : Factor w/ 4 levels "KNMI CRUTEM.4.6.0.0",..: 3 3 3 3 3 3 3 3 3 3 ...
- $ anomaly         : num  -0.079 -0.009 -0.519 -1.139 -0.899 ...
- $ reference_period: Factor w/ 1 level "1961-1990": 1 1 1 1 1 1 1 1 1 1 ...  
+# Temperature series by NIWA Seven Station Series but with reference to a baseline of the 1961-1990 average
 
-# filter by source (NIWA 7 station)
-filter(StatsNZ7Sdata19611990, source == "NIWA 7 Station" )
-Error in source == "NIWA 7 Station" : 
-  comparison (1) is possible only for atomic and list types
-
-# select using Base R
-StatsNZ7Sdata19611990[StatsNZ7Sdata19611990[["source"]] == "NIWA 7 Station",]
-# 111 rows looks ok
-# select only 7 station to its own dataframe
-StatsNZ7Sdata <- StatsNZ7Sdata19611990[StatsNZ7Sdata19611990[["source"]] == "NIWA 7 Station",]
-# check new dataframe
-str(StatsNZ7Sdata)
-'data.frame':	111 obs. of  6 variables:
- $ year            : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
- $ temperature     : num  12.4 12.5 11.9 11.3 11.6 ...
- $ data_released   : int  2020 2020 2020 2020 2020 2020 2020 2020 2020 2020 ...
- $ source          : Factor w/ 4 levels "KNMI CRUTEM.4.6.0.0",..: 3 3 3 3 3 3 3 3 3 3 ...
- $ anomaly         : num  -0.079 -0.009 -0.519 -1.139 -0.899 ...
- $ reference_period: Factor w/ 1 level "1961-1990": 1 1 1 1 1 1 1 1 1 1 ...  
-
-#subset to just 3 variables 
-StatsNZ7Sdata3 <-data.frame(StatsNZ7Sdata[["year"]],StatsNZ7Sdata[["temperature"]],StatsNZ7Sdata[["anomaly"]])
-str(StatsNZ7Sdata3) 
-'data.frame':	111 obs. of  3 variables:
- $ StatsNZ7Sdata...year...       : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
- $ StatsNZ7Sdata...temperature...: num  12.4 12.5 11.9 11.3 11.6 ...
- $ StatsNZ7Sdata...anomaly...    : num  -0.079 -0.009 -0.519 -1.139 -0.899
-# rename columns 
-colnames(StatsNZ7Sdata3) <- c("year", "temperature", "anomaly") 
-# write to .csv file
-write.table(StatsNZ7Sdata3, file = "/home/user/R/nzt7/StatsNZ-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE) 
-
-# create graph
- 
-svg(filename="STATSNZ-T7-land-temp-anom-2019-720by540-v1.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
-par(mar=c(2.7,2.7,1,1)+0.1)
-plot(StatsNZ7Sdata[["year"]],StatsNZ7Sdata[["anomaly"]],ylim=c(-1.25,1.35),xlim=c(1905,2019),tck=0.01,axes=FALSE,ann=FALSE, type="l",col="1",lwd=1,las=1)
-axis(side=1, tck=0.01, las=0,tick=TRUE)
-axis(side=2, tck=0.01, las=0,tick=TRUE,las=1)
-box()
-lines(StatsNZ7Sdata[["year"]],StatsNZ7Sdata[["anomaly"]],col="1",lwd=1)
-points(StatsNZ7Sdata[["year"]],StatsNZ7Sdata[["anomaly"]],col="#000099",pch=19)
-lines(lowess(StatsNZ7Sdata[["year"]],StatsNZ7Sdata[["anomaly"]],f=0.1),lwd=3,col="#CC0000")
-mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.stats.govt.nz/indicators/temperature")
-mtext(side=3,cex=1.5, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2019")) )
-mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1961-1990 mean")
-legend(1910, 1,bty='n',bg="white", cex = 0.8, c(paste("Mean", c("annual anomaly", "lowess smoothed anomaly 11 years f =0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
-mtext(side=4,cex=0.75, line=0.05,R.version.string)
-abline(h=0,col="darkgray")
-dev.off()  
------------------------------------------------------------------------------
-New Zealand NIWA Seven-station series land surface temperature data 1909 2018
+New Zealand NIWA Seven-station series land surface temperature data 1909 to date
 
 https://www.niwa.co.nz/our-science/climate/information-and-resources/nz-temp-record/seven-station-series-temperature-data
 
@@ -87,16 +11,8 @@ https://www.niwa.co.nz/our-science/climate/information-and-resources/nz-temp-rec
 # 2) 7-Station Composite Temperature = 7-Station Anomaly + Average of 7-Station 1981-2010 climatologies, E.g., for 1909 when there are 4 sites, the 7-Station Composite Temp is NOT the average of the Wellington, Nelson, Lincoln and Dunedin values.
 # 3) The climatologies are specific to the "Reference" stations at each location, which are: Auckland Aero (Auckland, agent 1962), East Taratahi AWS (Masterton, agent 2612), Kelburn (Wellington, agent 3385), Hokitika Aero (Hokitika, agent 3909), Nelson Aero (Nelson, agent 4241), Lincoln Broadfield EWS (Lincoln, agent 17603), and Musselburgh EWS (Dunedin, agent 15752).
 
-
-getwd()
-
-#setwd("/home/user/R/nzt7")
-library(here)
-here() starts at /home/user/R/nzt7
-set_here()
+# load library
 library(readxl)
-library(knitr)
-library(tidyr) 
 
 # obtain data sheet from NIWA
 url <- c("https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
@@ -107,31 +23,30 @@ Content type 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 ==================================================
 downloaded 22 KB
 
-library(readxl)
-
 # List all sheets in an excel spreadsheet 
 excel_sheets("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 [1] "NZT7_Adjusted_TMean2016_Web"
 
 t7data <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="Q12:Q122", col_names = T, skip =11,col_types = c("guess"))
 # Alternatively read in the tidied data in csv format
-t7data <- read.csv("niwa-t7data.csv")
+#t7data <- read.csv("niwa-t7data.csv")
 
 str(t7data) 
-'data.frame':	110 obs. of  2 variables:
+'data.frame':	114 obs. of  2 variables:
  $ Year   : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8
 
 #Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
 # $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 
+# read in years
 year <-read_excel("NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx", sheet = "NZT7_Adjusted_TMean2016_Web", range ="A12:A122", col_names = T, skip =11,col_types = c("guess"))
 str(year) 
 Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	110 obs. of  1 variable:
  $ X__1: num  1909 1910 1911 1912 1913 . 
  
 t7data<-cbind(year,t7data) 
-
+# check straucture of dataframe
 str(t7data) 
 'data.frame':	110 obs. of  2 variables:
  $ X__1   : num  1909 1910 1911 1912 1913 ...
@@ -151,7 +66,7 @@ tail(t7data)
 103 2016    0.84
 104 2017    0.54
 105 2018    0.80
-
+# write dataframe to .csv file
 write.table(t7data, file = "/home/user/R/nzt7/niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 
 # read back tidy data file
@@ -173,6 +88,9 @@ t7data <- rbind(t7data,c(2021,0.95))
 # add 2022 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2022 11 January 2023 2022: New Zealand’s warmest year on record, again. Overview 2022 was Aotearoa New Zealand’s warmest year on record, surpassing the record set just last year (Figure 1,Figure 2a). The nationwide average temperature for 2022 calculated using stations in NIWA’s seven-station series was 13.76˚C, being +1.15˚C above the 1981-2010 annual average, surpassing 2021 by +0.20˚C
 
 t7data <- rbind(t7data,c(2022,1.15))
+
+#t7data <- read.csv("niwa-t7data.csv") 
+ 
 str(t7data)
 'data.frame':	114 obs. of  2 variables:
  $ Year   : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
@@ -186,7 +104,8 @@ t7data[["Anomaly"]][114] - t7data[["Anomaly"]][1]
 [1] 1.37 
 
 # create svg format chart with 14 pt text font and grid lines via 'grid' and linear trend line
-svg(filename="/home/user/R/nzt7/nzt7timeseries2022-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
+png("nzt7timeseries2022-560by420.png", bg="white", width=560, height=420,pointsize = 12)
+#svg(filename="/home/user/R/nzt7/nzt7timeseries2022-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
 par(mar=c(2.7,2.7,1,1)+0.1)
 plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,type='l',lty=1)
 grid(col="darkgray",lwd=1)
@@ -251,12 +170,6 @@ dev.off()
 
 write.table(t7data, file = "/home/user/R/nzt7/niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 
-knit("nzt7.r", output = "nzt7.html", tangle = FALSE, quiet = FALSE, envir = parent.frame(), encoding = "UTF-8")
-[1] "nzt7.html"
-# just a plain text file with a .html suffix 
-knit("nzt7.r")
-[1] "nzt7.txt"
-# just a plain text file  
 --------------------------------------
 # convert t7data into time series object
 # find start

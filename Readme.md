@@ -1,3 +1,9 @@
+---
+title: "NIWA Seven Station Temperature Series with a baseline of the 1961-1990 average"
+output: html_document
+date: 2023-01-13
+---
+
 ## New Zealand NIWA Seven-station series land surface temperature data 1909 to 2018. 
 
 ### Description
@@ -7,8 +13,6 @@ This repository features the code to download the New Zealand [NIWA Seven-statio
 R script
 
 ```{r}
-library(here)
-set_here()
 library(readxl)
 ```
 
