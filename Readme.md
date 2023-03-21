@@ -11,7 +11,7 @@ date: 2023-01-13
 This repository features the code to download the New Zealand [NIWA Seven-station series](https://www.niwa.co.nz/our-science/climate/information-and-resources/nz-temp-record/seven-station-series-temperature-data) land surface temperature data and to create a chart.
 
 R script
-
+load package "readxl"
 ```{r}
 library(readxl)
 ```
