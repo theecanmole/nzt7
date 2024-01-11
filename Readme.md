@@ -1,10 +1,9 @@
 ---
 title: "NIWA Seven Station Temperature Series with a baseline of the 1961-1990 average"
-output: html_document
-date: 2023-01-13
+date: 2024-01-11
 ---
 
-## New Zealand NIWA Seven-station series land surface temperature data 1909 to 2018. 
+## New Zealand NIWA Seven-station series land surface temperature data from 1909. 
 
 ### Description
 
@@ -68,17 +67,6 @@ str(t7data)
  $ Year   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 ```
-Inspect last 5 rows of dataframe
-```{r}
-tail(t7data)
-   Year Anomaly
-105 2013    0.72
-106 2014    0.18
-107 2015    0.14
-108 2016    0.84
-109 2017    0.54
-110 2018    0.80
-```
 add 2019 annual anomaly 0.76 C ref https://www.nzherald.co.nz/environment/news/article.cfm?c_id=39&objectid=12299091
 ```{r}
 t7data <- rbind(t7data,c(2019,0.76))
@@ -95,6 +83,10 @@ add 2022 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-202
 ```{r}
 t7data <- rbind(t7data,c(2022,1.15))
 ```
+add 2023 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2023
+```{r}
+t7data <- rbind(t7data,c(2022,0.87))
+```
 write the datafame to a .csv file
 ```{r}
 write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
@@ -109,7 +101,7 @@ plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,typ
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2022")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2023")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=1)
