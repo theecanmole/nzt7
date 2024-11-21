@@ -1,4 +1,4 @@
-# Temperature series by NIWA Seven Station Series but with reference to a baseline of the 1961-1990 average
+## Temperature series by NIWA Seven Station Series but with reference to a baseline of the 1961-1990 average
 
 New Zealand NIWA Seven-station series land surface temperature data 1909 to date
 
@@ -262,3 +262,45 @@ Time-Series [1:113] from 1909 to 2021: -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67
 # Apply identical function
 identical(t7timeseries, t7timeseriesv2)
 [1] TRUE
+--------------------------------------------------------
+t7data <- read.csv("niwa-t7data.csv")  
+
+str(t7data)
+'data.frame':	115 obs. of  2 variables:
+ $ Year   : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
+ $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+
+# create a dataframe with Date format column and temperature anomaly in numeric format
+t7df <- data.frame(Date = seq(as.Date("1909/12/31"), by = "year", length.out = 115), Anomaly = t7data[["Anomaly"]] ) 
+
+str(t7df)
+'data.frame':	115 obs. of  2 variables:
+ $ Date   : Date, format: "1909-12-31" "1910-12-31" ...
+ $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ... 
+ 
+# write dataframe to .csv file
+write.table(t7df, file = "/home/user/R/nzt7/t7dataframe.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
+
+# create a zoo time series matrix 
+library(zoo)
+t7zoo <- zoo(x= t7df[["Anomaly"]],  order.by = t7df[["Date"]]) 
+str(t7zoo) 
+‘zoo’ series from 1909-12-31 to 2023-12-31
+  Data: num [1:115] -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+  Index:  Date[1:115], format: "1909-12-31" "1910-12-31" "1911-12-31" "1912-12-31" "1913-12-31" ... 
+  
+svg(filename="NZ-T7-land-temp-anom-df-2021-720by540-TS.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+par(mar=c(2.7,2.7,1,1)+0.1)
+plot(t7zoo,tck=0.01, type="l",col="1",lwd=1,las=1)
+axis(side=4, tck=0.01, las=0,tick=TRUE,label=FALSE)
+axis(side=2, tck=0.01, las=0,tick=TRUE,las=1)
+#box()
+lines(t7zoo,col="1",lwd=1)
+points(t7zoo,col="blue",pch=19)
+mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2023")) )
+mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
+legend(-12000, 0.8,bty='n',bg="white", cex = 0.8, c(paste("Mean annual anomaly")),pch=c(19),lty=c(1),lwd=c(1),col=c("blue"))
+mtext(side=4,cex=0.75, line=0.05,R.version.string)
+abline(h=0,col="darkgray")
+dev.off()
