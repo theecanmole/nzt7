@@ -107,11 +107,12 @@ str(t7data)
 
 tail(t7data,2)
     Year Anomaly
-113 2021    0.95
-114 2022    1.15 
+114 2022    1.15
+115 2023    0.87
+
 # calculate absolute change - last (115th) anomaly less first (1st) anomaly
 t7data[["Anomaly"]][115] - t7data[["Anomaly"]][1]
-
+[1] 1.09
 # [1] 1.37 
 
 # create svg format chart with 14 pt text font and grid lines via 'grid' and linear trend line
@@ -122,10 +123,10 @@ plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,typ
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Annual Average Temperature \nAnomaly 1909 - 2023")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2023")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
-abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=1)
+abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=2)
 legend(1920, 0.8, bty='n',bg="white", cex = 0.8, c(paste("Annual anomaly", c("mean", "linear trend line"))),pch=c(NA,NA),lty=c(1,1),lwd=c(2,2),col=c("#CC0000","#000099"))
 dev.off()
 
@@ -168,7 +169,7 @@ lines(t7data[["Year"]],t7data[["Anomaly"]],col="1",lwd=1)
 points(t7data[["Year"]],t7data[["Anomaly"]],col="#000099",pch=19)
 lines(lowess(t7data[["Year"]],t7data[["Anomaly"]],f=0.1),lwd=3,col="#CC0000")
 mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2023")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2023")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 legend(1910, 1,bty='n',bg="white", cex = 0.8, c(paste("Mean", c("annual anomaly", "lowess smoothed anomaly 11 years f = 0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
@@ -288,6 +289,8 @@ str(t7zoo)
 ‘zoo’ series from 1909-12-31 to 2023-12-31
   Data: num [1:115] -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
   Index:  Date[1:115], format: "1909-12-31" "1910-12-31" "1911-12-31" "1912-12-31" "1913-12-31" ... 
+
+coredata(t7zoo)
   
 svg(filename="NZ-T7-land-temp-anom-df-2021-720by540-TS.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 par(mar=c(2.7,2.7,1,1)+0.1)
@@ -297,6 +300,7 @@ axis(side=2, tck=0.01, las=0,tick=TRUE,las=1)
 #box()
 lines(t7zoo,col="1",lwd=1)
 points(t7zoo,col="blue",pch=19)
+abline(lm(coredata(t7zoo) ~ index(t7zoo)),col="#CC0000",lwd=2,lty=1)
 mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
 mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2023")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
@@ -304,3 +308,96 @@ legend(-12000, 0.8,bty='n',bg="white", cex = 0.8, c(paste("Mean annual anomaly")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(h=0,col="darkgray")
 dev.off()
+
+summary(lm(coredata(t7zoo) ~ index(t7zoo)))
+Call:
+lm(formula = coredata(t7zoo) ~ index(t7zoo))
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.18631 -0.32620 -0.05027  0.28686  1.17963 
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -2.027e-01  4.019e-02  -5.044 1.76e-06 ***
+index(t7zoo)  3.083e-05  3.301e-06   9.340 1.03e-15 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4292 on 113 degrees of freedom
+Multiple R-squared:  0.4357,	Adjusted R-squared:  0.4307 
+F-statistic: 87.24 on 1 and 113 DF,  p-value: 1.025e-15 
+
+R.version.string
+[1] "R version 4.3.2 (2023-10-31)"
+
+sessionInfo()
+R version 4.3.2 (2023-10-31)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Debian GNU/Linux 12 (bookworm)
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.11.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.11.0
+
+locale:
+ [1] LC_CTYPE=en_NZ.UTF-8          LC_NUMERIC=C
+ [3] LC_TIME=en_NZ.UTF-8           LC_COLLATE=en_NZ.UTF-8
+ [5] LC_MONETARY=en_NZ.UTF-8       LC_MESSAGES=en_NZ.UTF-8
+ [7] LC_PAPER=en_NZ.UTF-8          LC_NAME=en_NZ.UTF-8
+ [9] LC_ADDRESS=en_NZ.UTF-8        LC_TELEPHONE=en_NZ.UTF-8
+[11] LC_MEASUREMENT=en_NZ.UTF-8    LC_IDENTIFICATION=en_NZ.UTF-8
+
+time zone: Pacific/Auckland
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base
+
+other attached packages:
+[1] rkward_0.7.5
+
+loaded via a namespace (and not attached):
+[1] compiler_4.3.2 tools_4.3.2
+
+library(simplermarkdown)
+example1 <- system.file("examples/example1.md", package = "simplermarkdown")
+ls()
+[1] "example1"
+str(example1)
+chr "/usr/lib/R/site-library/simplermarkdown/examples/example1.md"
+
+mdweave(example1, "example1_woven.md")
+Evaluating code in block 'codeblock1'.
+Evaluating code in block '<unlabeled code block>'.
+Evaluating code in inline block '<unlabeled inline block>'.
+Evaluating code in inline block '<unlabeled inline block>'.
+Evaluating code in block '<unlabeled code block>'.
+Evaluating code in block '<unlabeled code block>'.
+Warning message:
+In eval(ei, envir) : FOO
+ ls()
+[1] "a"        "b"        "c"        "dta"      "example1" "m"
+a
+b
+c
+str(dta)
+'data.frame':	150 obs. of  6 variables:
+ $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+ $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+ $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+ $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+ $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ foo         : num  0.686 0.612 0.681 0.674 0.72 ...
+
+system("pandoc example1_woven.md -o example1.pdf")
+
+mdweave_to_html
+
+To process your markdown file you can use the mdweave function:
+
+mdweave("mydocument.md", "mydocument_woven.md")
+# hwriter
+
+dta.html <- hwrite(dta, page=NULL)
+getwd()
