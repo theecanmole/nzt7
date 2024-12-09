@@ -1,6 +1,5 @@
 ---
 title: "NIWA Seven Station Temperature Series with a baseline of the 1961-1990 average"
-date: 2024-01-11
 ---
 
 ## New Zealand NIWA Seven-station series land surface temperature data from 1909. 
@@ -71,7 +70,7 @@ add 2019 annual anomaly 0.76 C ref https://www.nzherald.co.nz/environment/news/a
 ```{r}
 t7data <- rbind(t7data,c(2019,0.76))
 ```
-add 2020 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2020 2020
+add 2020 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2020 
 ```{r}
 t7data <- rbind(t7data,c(2020,0.63))
 ```
@@ -101,7 +100,7 @@ plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,typ
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("NZ Annual Average Temperature \nAnomaly 1909 - 2023")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2023")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=1)
