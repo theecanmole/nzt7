@@ -329,10 +329,35 @@ Multiple R-squared:  0.4357,	Adjusted R-squared:  0.4307
 F-statistic: 87.24 on 1 and 113 DF,  p-value: 1.025e-15 
 
 R.version.string
-[1] "R version 4.3.2 (2023-10-31)"
+[1] "R version 4.2.2 Patched (2022-11-10 r83330)"
+#[1] "R version 4.3.2 (2023-10-31)"
 
 sessionInfo()
-R version 4.3.2 (2023-10-31)
+R version 4.2.2 Patched (2022-11-10 r83330)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Debian GNU/Linux 12 (bookworm)
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.11.0
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.11.0
+
+locale:
+ [1] LC_CTYPE=en_NZ.UTF-8          LC_NUMERIC=C
+ [3] LC_TIME=en_NZ.UTF-8           LC_COLLATE=en_NZ.UTF-8
+ [5] LC_MONETARY=en_NZ.UTF-8       LC_MESSAGES=en_NZ.UTF-8
+ [7] LC_PAPER=en_NZ.UTF-8          LC_NAME=en_NZ.UTF-8
+ [9] LC_ADDRESS=en_NZ.UTF-8        LC_TELEPHONE=en_NZ.UTF-8
+[11] LC_MEASUREMENT=en_NZ.UTF-8    LC_IDENTIFICATION=en_NZ.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base
+
+other attached packages:
+[1] rkward_0.7.5
+
+loaded via a namespace (and not attached):
+[1] compiler_4.2.2 tools_4.2.2
+#R version 4.3.2 (2023-10-31)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Debian GNU/Linux 12 (bookworm)
 
@@ -360,44 +385,3 @@ other attached packages:
 loaded via a namespace (and not attached):
 [1] compiler_4.3.2 tools_4.3.2
 
-library(simplermarkdown)
-example1 <- system.file("examples/example1.md", package = "simplermarkdown")
-ls()
-[1] "example1"
-str(example1)
-chr "/usr/lib/R/site-library/simplermarkdown/examples/example1.md"
-
-mdweave(example1, "example1_woven.md")
-Evaluating code in block 'codeblock1'.
-Evaluating code in block '<unlabeled code block>'.
-Evaluating code in inline block '<unlabeled inline block>'.
-Evaluating code in inline block '<unlabeled inline block>'.
-Evaluating code in block '<unlabeled code block>'.
-Evaluating code in block '<unlabeled code block>'.
-Warning message:
-In eval(ei, envir) : FOO
- ls()
-[1] "a"        "b"        "c"        "dta"      "example1" "m"
-a
-b
-c
-str(dta)
-'data.frame':	150 obs. of  6 variables:
- $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
- $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
- $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
- $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
- $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
- $ foo         : num  0.686 0.612 0.681 0.674 0.72 ...
-
-system("pandoc example1_woven.md -o example1.pdf")
-
-mdweave_to_html
-
-To process your markdown file you can use the mdweave function:
-
-mdweave("mydocument.md", "mydocument_woven.md")
-# hwriter
-
-dta.html <- hwrite(dta, page=NULL)
-getwd()
