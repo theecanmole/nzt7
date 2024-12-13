@@ -387,3 +387,26 @@ other attached packages:
 loaded via a namespace (and not attached):
 [1] compiler_4.3.2 tools_4.3.2
 
+https://stackoverflow.com/questions/78194010/how-to-convert-r-script-to-r-markdown
+knitr::spin(hair = "nzt7.r", knit = FALSE)
+[1] "nzt7.Rmd"
+
+Call your file README.Rmd, and run render() on it to generate a README.md file that contains the output and push both to GitHub.
+render("nzt7.Rmd", output_file = "nzt7.md")
+
+help(spin)
+
+knitr::spin(hair = "nzt7.r",
++           knit=TRUE,        # knit doc
++           format = "Rmd",
++           precious = TRUE,  # keep intermediate files
++           )
+
+
+processing file: nzt7.Rmd
+1/5
+2/5 [unnamed-chunk-1]
+3/5
+4/5 [unnamed-chunk-2]
+5/5
+output file: nzt7.md
