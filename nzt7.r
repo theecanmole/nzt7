@@ -104,13 +104,6 @@ str(t7data)
 'data.frame':	116 obs. of  2 variables:
  $ Year   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
-#'data.frame':	115 obs. of  2 variables:
- $ Year   : num  1909 1910 1911 1912 1913 ...
- $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
-# 2022
-#'data.frame':	114 obs. of  2 variables:
-# $ Year   : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
-# $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ... 
 
 tail(t7data,3)
     Year Anomaly
@@ -125,7 +118,7 @@ t7data[["Anomaly"]][116] - t7data[["Anomaly"]][1]
 # [1] 1.37 
 
 # create svg format chart with 14 pt text font and grid lines via 'grid' and linear trend line
-png("nzt7timeseries2022-560by420.png", bg="white", width=560, height=420,pointsize = 12)
+#png("nzt7timeseries2022-560by420.png", bg="white", width=560, height=420,pointsize = 12)
 svg(filename="/home/user/R/nzt7/nzt7timeseries2022-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
 par(mar=c(2.7,2.7,1,1)+0.1)
 plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col="#CC0000",lwd=2,type='l',lty=1)
@@ -277,7 +270,7 @@ identical(t7timeseries, t7timeseriesv2)
 t7data <- read.csv("niwa-t7data.csv")  
 
 str(t7data)
-'data.frame':	115 obs. of  2 variables:
+'data.frame':	116 obs. of  2 variables:
  $ Year   : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 
@@ -420,3 +413,29 @@ processing file: nzt7.Rmd
 4/5 [unnamed-chunk-2]
 5/5
 output file: nzt7.md
+
+sessionInfo()
+R version 4.2.2 Patched (2022-11-10 r83330)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Debian GNU/Linux 12 (bookworm)
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.21.so
+
+locale:
+ [1] LC_CTYPE=en_NZ.UTF-8          LC_NUMERIC=C
+ [3] LC_TIME=en_NZ.UTF-8           LC_COLLATE=en_NZ.UTF-8
+ [5] LC_MONETARY=en_NZ.UTF-8       LC_MESSAGES=en_NZ.UTF-8
+ [7] LC_PAPER=en_NZ.UTF-8          LC_NAME=en_NZ.UTF-8
+ [9] LC_ADDRESS=en_NZ.UTF-8        LC_TELEPHONE=en_NZ.UTF-8
+[11] LC_MEASUREMENT=en_NZ.UTF-8    LC_IDENTIFICATION=en_NZ.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base
+
+other attached packages:
+[1] rkward_0.7.5
+
+loaded via a namespace (and not attached):
+[1] compiler_4.2.2 tools_4.2.2

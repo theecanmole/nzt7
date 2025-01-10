@@ -84,7 +84,11 @@ t7data <- rbind(t7data,c(2022,1.15))
 ```
 add 2023 anomaly https://niwa.co.nz/climate/summaries/annual-climate-summary-2023
 ```{r}
-t7data <- rbind(t7data,c(2022,0.87))
+t7data <- rbind(t7data,c(2023,0.87))
+```
+add 2024 anomaly https://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2024
+```{r}
+t7data <- rbind(t7data,c(2024,0.51))
 ```
 write the datafame to a .csv file
 ```{r}
