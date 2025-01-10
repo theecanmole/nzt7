@@ -93,11 +93,18 @@ t7data <- rbind(t7data,c(2022,1.15))
 t7data <- read.csv("niwa-t7data.csv")  
 
 # add 2023 anomaly	https://niwa.co.nz/climate/summaries/annual-climate-summary-2023 "2023 was Aotearoa New Zealand’s 2nd warmest year on record, just shy of the record set in 2022 (Figure 1a). The nationwide average temperature for 2023 calculated from NIWA’s seven station series was 13.61˚C, being 0.87˚C above the 1991-2020 annual average".
-# add 2023 anomaly
+
 t7data <- rbind(t7data,c(2023,0.87))
- 
+
+# add 2024 anomaly  https://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2024 "2024 was Aotearoa New Zealand’s 10th-warmest year on record. The 2024 nationwide average temperature calculated from NIWA’s seven station series was 13.25˚C, being 0.51˚C above the 1991-2020 annual average"
+
+t7data <- rbind(t7data,c(2024,0.51))
+
 str(t7data)
-'data.frame':	115 obs. of  2 variables:
+'data.frame':	116 obs. of  2 variables:
+ $ Year   : num  1909 1910 1911 1912 1913 ...
+ $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+#'data.frame':	115 obs. of  2 variables:
  $ Year   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 # 2022
@@ -105,25 +112,27 @@ str(t7data)
 # $ Year   : int  1909 1910 1911 1912 1913 1914 1915 1916 1917 1918 ...
 # $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ... 
 
-tail(t7data,2)
+tail(t7data,3)
     Year Anomaly
 114 2022    1.15
-115 2023    0.87
+115 2022    0.87
+116 2024    0.51
 
-# calculate absolute change - last (115th) anomaly less first (1st) anomaly
-t7data[["Anomaly"]][115] - t7data[["Anomaly"]][1]
-[1] 1.09
+# calculate absolute change - last (116th) anomaly less first (1st) anomaly
+t7data[["Anomaly"]][116] - t7data[["Anomaly"]][1]
+[1] 0.73
+# [1] 1.09
 # [1] 1.37 
 
 # create svg format chart with 14 pt text font and grid lines via 'grid' and linear trend line
-#png("nzt7timeseries2022-560by420.png", bg="white", width=560, height=420,pointsize = 12)
+png("nzt7timeseries2022-560by420.png", bg="white", width=560, height=420,pointsize = 12)
 svg(filename="/home/user/R/nzt7/nzt7timeseries2022-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))  
 par(mar=c(2.7,2.7,1,1)+0.1)
 plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col="#CC0000",lwd=2,type='l',lty=1)
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2023")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2024")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=2)
@@ -161,7 +170,7 @@ F-statistic: 76.19 on 1 and 111 DF,  p-value: 2.961e-14
 # create graph in the style of a NASA GISS chart with lowess regression line and gridlines in darkgray
 svg(filename="NZ-T7-land-temp-anom-2022-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 par(mar=c(2.7,2.7,1,1)+0.1)
-plot(t7data[["Year"]],t7data[["Anomaly"]],ylim=c(-1.5,1.45),xlim=c(1905,2023),tck=0.01,axes=FALSE,ann=FALSE, type="l",col="1",lwd=1,las=1)
+plot(t7data[["Year"]],t7data[["Anomaly"]],ylim=c(-1.5,1.45),xlim=c(1905,2024),tck=0.01,axes=FALSE,ann=FALSE, type="l",col="1",lwd=1,las=1)
 axis(side=1, tck=0.01, las=0,tick=TRUE)
 axis(side=2, tck=0.01, las=0,tick=TRUE,las=1)
 grid(col="darkgray",lwd=1)
@@ -170,7 +179,7 @@ lines(t7data[["Year"]],t7data[["Anomaly"]],col="1",lwd=1)
 points(t7data[["Year"]],t7data[["Anomaly"]],col="#000099",pch=19)
 lines(lowess(t7data[["Year"]],t7data[["Anomaly"]],f=0.1),lwd=3,col="#CC0000")
 mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2023")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2024")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 legend(1910, 1,bty='n',bg="white", cex = 0.8, c(paste("Mean", c("annual anomaly", "lowess smoothed anomaly 11 years f = 0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
@@ -192,11 +201,11 @@ tail(t7data,1)
 
 # create a time series object ts(data = NA, start = 1, end = numeric(), frequency = 1, deltat = 1, ts.eps = getOption("ts.eps"), class = , names = )
 
-t7timeseries <- ts(t7data[["Anomaly"]], start = 1909, end = 2023, frequency =1 )
+t7timeseries <- ts(t7data[["Anomaly"]], start = 1909, end = 2024, frequency =1 )
 is.ts(t7timeseries)
 [1] TRUE 
 str(t7timeseries)
-Time-Series [1:115] from 1909 to 2023: -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+Time-Series [1:116] from 1909 to 2024: -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 print(t7timeseries)
 Time Series:
 Start = 1909 
@@ -238,7 +247,7 @@ lines(t7timeseries,col="1",lwd=1)
 points(t7timeseries,col="#000099",pch=19)
 lines(lowess(t7timeseries,f=0.1),lwd=3,col="#CC0000")
 mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2021")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand Mean Land Surface \nTemperature Anomalies 1909 - 2024")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 legend(1910, 1,bty='n',bg="white", cex = 0.8, c(paste("Mean", c("annual anomaly", "lowess smoothed anomaly 11 years f = 0.1"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
@@ -273,12 +282,12 @@ str(t7data)
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 
 # create a dataframe with Date format column and temperature anomaly in numeric format
-t7df <- data.frame(Date = seq(as.Date("1909/12/31"), by = "year", length.out = 115), Anomaly = t7data[["Anomaly"]] ) 
+t7df <- data.frame(Date = seq(as.Date("1909/12/31"), by = "year", length.out = 116), Anomaly = t7data[["Anomaly"]] )
 
 str(t7df)
-'data.frame':	115 obs. of  2 variables:
+'data.frame':	116 obs. of  2 variables:
  $ Date   : Date, format: "1909-12-31" "1910-12-31" ...
- $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ... 
+ $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
  
 # write dataframe to .csv file
 write.table(t7df, file = "/home/user/R/nzt7/t7dataframe.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
@@ -287,9 +296,9 @@ write.table(t7df, file = "/home/user/R/nzt7/t7dataframe.csv", sep = ",", col.nam
 library(zoo)
 t7zoo <- zoo(x= t7df[["Anomaly"]],  order.by = t7df[["Date"]]) 
 str(t7zoo) 
-‘zoo’ series from 1909-12-31 to 2023-12-31
-  Data: num [1:115] -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
-  Index:  Date[1:115], format: "1909-12-31" "1910-12-31" "1911-12-31" "1912-12-31" "1913-12-31" ... 
+‘zoo’ series from 1909-12-31 to 2024-12-31
+  Data: num [1:116] -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+  Index:  Date[1:116], format: "1909-12-31" "1910-12-31" "1911-12-31" "1912-12-31" "1913-12-31" ...
 
 coredata(t7zoo)
   
@@ -300,17 +309,18 @@ grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,label=FALSE)
 axis(side=2, tck=0.01, las=0,tick=TRUE,las=1)
 lines(t7zoo,col="1",lwd=1)
-points(t7zoo,col="blue",pch=19)
-abline(lm(coredata(t7zoo) ~ index(t7zoo)),col="#CC0000",lwd=2,lty=2)
+#points(t7zoo,col="1",pch=19)
+abline(lm(coredata(t7zoo) ~ index(t7zoo)),col="2",lwd=1,lty=1)
 mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2023")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2024")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 #legend(-12000, 0.8,bty='n',bg="white", cex = 0.8, c(paste("Mean annual anomaly")),pch=c(19),lty=c(1),lwd=c(1),col=c("blue"))
-legend(-12000, 0.8, bty='n',bg="white", cex = 0.8, c(paste("Annual anomaly", c("mean", "linear trend line"))),pch=c(19,NA),lty=c(1,2),lwd=c(2,2),col=c("#000099","#CC0000"))
+legend(-12000, 0.8, bty='n',bg="white", cex = 0.8, c(paste("Annual anomaly", c("mean", "linear trend line"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,1),col=c("1","2"))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(h=0,col="darkgray")
 dev.off()
 
+# col=c("#000099","#CC0000")
 summary(lm(coredata(t7zoo) ~ index(t7zoo)))
 Call:
 lm(formula = coredata(t7zoo) ~ index(t7zoo))
