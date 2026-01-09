@@ -67,6 +67,7 @@ tail(t7data)
 103 2016    0.84
 104 2017    0.54
 105 2018    0.80
+
 # write dataframe to .csv file
 write.table(t7data, file = "/home/user/R/nzt7/niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
 
@@ -101,20 +102,25 @@ t7data <- rbind(t7data,c(2023,0.87))
 
 t7data <- rbind(t7data,c(2024,0.51))
 
+# add 2025 anomaly  https://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2025 08 January 2026 "2025 was Aotearoa New Zealand’s 4th-warmest year on record. The 2025 nationwide average temperature calculated from Earth Sciences New Zealand’s (ESNZ) seven station series was 13.51°C, being 0.77°C above the 1991-2020 annual average. Four of New Zealand’s five warmest years on record have occurred since 2021"
+
+t7data <- rbind(t7data,c(2025,0.77))
+
 str(t7data)
-'data.frame':	116 obs. of  2 variables:
+'data.frame':	117 obs. of  2 variables:
  $ Year   : num  1909 1910 1911 1912 1913 ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 
 tail(t7data,3)
-    Year Anomaly
-114 2022    1.15
+   Year Anomaly
 115 2022    0.87
 116 2024    0.51
+117 2025    0.77
 
 # calculate absolute change - last (116th) anomaly less first (1st) anomaly
-t7data[["Anomaly"]][116] - t7data[["Anomaly"]][1]
-[1] 0.73
+t7data[["Anomaly"]][117] - t7data[["Anomaly"]][1]
+[1] 0.99
+# [1] 0.73
 # [1] 1.09
 # [1] 1.37 
 
@@ -125,12 +131,12 @@ par(mar=c(2.7,2.7,1,1)+0.1)
 plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col="#CC0000",lwd=2,type='l',lty=1)
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
-mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2024")) )
+mtext(side=1,cex=0.8,line=-1.3,"Data: https://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2025 \nhttps://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2025")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
-abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=2)
-legend(1920, 0.8, bty='n',bg="white", cex = 0.8, c(paste("Annual anomaly", c("mean", "linear trend line"))),pch=c(NA,NA),lty=c(1,1),lwd=c(2,2),col=c("#CC0000","#000099"))
+abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=3,lty=1)
+legend(1920, 0.85, bty='n',bg="white", cex = 0.9, c(paste("Annual anomaly", c("mean", "linear trend line"))),pch=c(NA,NA),lty=c(1,1),lwd=c(2,3),col=c("#CC0000","#000099"))
 dev.off()
 
 lm(t7data[["Anomaly"]]~t7data[["Year"]])
@@ -161,6 +167,7 @@ Residual standard error: 0.4243 on 111 degrees of freedom
 Multiple R-squared:  0.407,	Adjusted R-squared:  0.4017 
 F-statistic: 76.19 on 1 and 111 DF,  p-value: 2.961e-14 
 .25 * 116 = 29
+
 # create graph in the style of a NASA GISS chart with lowess regression line and gridlines in darkgray
 svg(filename="NZ-T7-land-temp-anom-2022-720by540.svg", width = 8, height = 6, pointsize = 14, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 par(mar=c(2.7,2.7,1,1)+0.1)
@@ -172,8 +179,8 @@ box()
 lines(t7data[["Year"]],t7data[["Anomaly"]],col="1",lwd=1)
 points(t7data[["Year"]],t7data[["Anomaly"]],col="#000099",pch=19)
 lines(lowess(t7data[["Year"]],t7data[["Anomaly"]],f=0.25),lwd=3,col="#CC0000")
-mtext(side=1,cex=0.7,line=-1.1,"Data: NIWA Seven-station series temperature data\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2024")) )
+mtext(side=1,cex=0.8,line=-1.1,"Data: NIWA Seven-station series temperature data\nhttps://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2025\n https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand mean land surface \ntemperature anomalies 1909 - 2025")) )
 mtext(side=2,cex=1, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 legend(1910, 1,bty='n',bg="white", cex = 0.8, c(paste("Mean", c("annual anomaly", "lowess smoothed anomaly f = 0.25"))),pch=c(19,NA),lty=c(1,1),lwd=c(1,3),col=c("#000099","#CC0000"))
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
@@ -191,7 +198,7 @@ head(t7data,1)
 # find end
 tail(t7data,1)
     Year Anomaly
-113 2021    0.95
+117 2025    0.77
 
 # create a time series object ts(data = NA, start = 1, end = numeric(), frequency = 1, deltat = 1, ts.eps = getOption("ts.eps"), class = , names = )
 
@@ -256,10 +263,10 @@ str(t7data)
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
 
 # create a dataframe with Date format column and temperature anomaly in numeric format
-t7df <- data.frame(Date = seq(as.Date("1909/12/31"), by = "year", length.out = 116), Anomaly = t7data[["Anomaly"]] )
+t7df <- data.frame(Date = seq(as.Date("1909/12/31"), by = "year", length.out = 117), Anomaly = t7data[["Anomaly"]] )
 
 str(t7df)
-'data.frame':	116 obs. of  2 variables:
+'data.frame':	117 obs. of  2 variables:
  $ Date   : Date, format: "1909-12-31" "1910-12-31" ...
  $ Anomaly: num  -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
  
@@ -271,8 +278,8 @@ library(zoo)
 t7zoo <- zoo(x= t7df[["Anomaly"]],  order.by = t7df[["Date"]]) 
 str(t7zoo) 
 ‘zoo’ series from 1909-12-31 to 2024-12-31
-  Data: num [1:116] -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
-  Index:  Date[1:116], format: "1909-12-31" "1910-12-31" "1911-12-31" "1912-12-31" "1913-12-31" ...
+  Data: num [1:117] -0.22 -0.15 -0.66 -1.28 -1.04 -1.03 -0.67 0.38 0.19 -0.8 ...
+  Index:  Date[1:117], format: "1909-12-31" "1910-12-31" "1911-12-31" "1912-12-31" "1913-12-31" ...
 
 coredata(t7zoo)
 
@@ -280,7 +287,34 @@ R.version.string
 [1] "R version 4.2.2 Patched (2022-11-10 r83330)"
 #[1] "R version 4.3.2 (2023-10-31)"
 
-sessionInfo()
+R version 4.2.2 Patched (2022-11-10 r83330)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Debian GNU/Linux 12 (bookworm)
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.21.so
+
+locale:
+ [1] LC_CTYPE=en_NZ.UTF-8          LC_NUMERIC=C
+ [3] LC_TIME=en_NZ.UTF-8           LC_COLLATE=en_NZ.UTF-8
+ [5] LC_MONETARY=en_NZ.UTF-8       LC_MESSAGES=en_NZ.UTF-8
+ [7] LC_PAPER=en_NZ.UTF-8          LC_NAME=en_NZ.UTF-8
+ [9] LC_ADDRESS=en_NZ.UTF-8        LC_TELEPHONE=en_NZ.UTF-8
+[11] LC_MEASUREMENT=en_NZ.UTF-8    LC_IDENTIFICATION=en_NZ.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base
+
+other attached packages:
+[1] zoo_1.8-12   readxl_1.4.5 rkward_0.7.5
+
+loaded via a namespace (and not attached):
+[1] compiler_4.2.2   tools_4.2.2      cellranger_1.1.0 grid_4.2.2
+[5] lattice_0.20-45
+
+# prior to Jan 2026
+# sessionInfo()
 R version 4.2.2 Patched (2022-11-10 r83330)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Debian GNU/Linux 12 (bookworm)

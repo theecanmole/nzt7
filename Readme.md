@@ -90,6 +90,10 @@ add 2024 anomaly https://niwa.co.nz/climate-and-weather/annual/annual-climate-su
 ```{r}
 t7data <- rbind(t7data,c(2024,0.51))
 ```
+add 2025 anomaly  https://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2025 08 January 2026 "2025 was Aotearoa New Zealand’s 4th-warmest year on record. The 2025 nationwide average temperature calculated from Earth Sciences New Zealand’s (ESNZ) seven station series was 13.51°C, being 0.77°C above the 1991-2020 annual average. Four of New Zealand’s five warmest years on record have occurred since 2021"
+```{r}
+t7data <- rbind(t7data,c(2025,0.77)) 
+```
 write the datafame to a .csv file
 ```{r}
 write.table(t7data, file = "niwa-t7data.csv", sep = ",", col.names = TRUE, qmethod = "double",row.names = FALSE)
@@ -104,7 +108,7 @@ plot(t7data,tck=0.01,ylim=c(-1.5,1.25),axes=TRUE,ann=TRUE, las=1,col=2,lwd=2,typ
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
 mtext(side=1,cex=0.7,line=-1.3,"Data: https://www.niwa.co.nz/sites/niwa.co.nz/files/NZT7_Adjusted_Annual_TMean2018_Web-updated-jan-2019.xlsx")
-mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2024")) )
+mtext(side=3,cex=1.7, line=-4,expression(paste("New Zealand annual average temperature \nanomaly 1909 - 2025")) )
 mtext(side=2,cex=0.9, line=-1.3,"Temperature anomaly C vs 1981-2010 mean")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 abline(lm(t7data[["Anomaly"]]~t7data[["Year"]]),col="#000099",lwd=2,lty=1)
