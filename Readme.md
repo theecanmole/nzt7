@@ -90,7 +90,7 @@ add 2024 anomaly https://niwa.co.nz/climate-and-weather/annual/annual-climate-su
 ```{r}
 t7data <- rbind(t7data,c(2024,0.51))
 ```
-add 2025 anomaly  https://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2025 08 January 2026 "2025 was Aotearoa New Zealand’s 4th-warmest year on record. The 2025 nationwide average temperature calculated from Earth Sciences New Zealand’s (ESNZ) seven station series was 13.51°C, being 0.77°C above the 1991-2020 annual average. Four of New Zealand’s five warmest years on record have occurred since 2021"
+add 2025 anomaly  https://niwa.co.nz/climate-and-weather/annual/annual-climate-summary-2025 08 January 2026. 
 ```{r}
 t7data <- rbind(t7data,c(2025,0.77)) 
 ```
@@ -138,4 +138,3 @@ This data and the R scripts are made available under the Public Domain Dedicatio
 3. [nzt7.r](nzt7.r)     (R script file of code to process data and to create chart)
 
 4. [Licence.txt](Licence.txt) (Public Domain  Dedication and License v1.0 http://opendatacommons.org/licenses/pddl/1.0/)
-
